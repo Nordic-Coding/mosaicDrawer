@@ -10,6 +10,8 @@ namespace mosaicDrawer
     {
         static void Main(string[] args)
         {
+            //Just for testing the mosaic, will be removed later on.
+
         }
     }
 }
