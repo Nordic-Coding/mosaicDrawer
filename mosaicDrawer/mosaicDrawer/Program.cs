@@ -12,7 +12,7 @@ namespace mosaicDrawer
         static void Main(string[] args)
         {
             //Just for testing the mosaic, will be removed later on.
-            int px = 500, py = 500;
+            int px = 50, py = 50;
             Mosaic mosaic = new Mosaic(px,py,500,500);
             byte[] rgb = new byte[px*py*3];
             Thread mosaicThread = new Thread(() => mosaic.runLoop(rgb));
@@ -22,7 +22,9 @@ namespace mosaicDrawer
             while (1 > 0)
             {
                 //Console.WriteLine("AAAAAAAAAAAAAAAA");
+                mosaic.rendering = true;
                 gibBytes(ref random,ref rgb);
+                mosaic.rendering = false;
                 //mosaic.updateMosaic(ref rgb);
                 Thread.Sleep(10);
             }
@@ -32,10 +34,14 @@ namespace mosaicDrawer
         public static void gibBytes(ref Random ran, ref byte[] ret)
         {
             //Generate a random byte sequence.
-            ran.NextBytes(ret);
-            /*for(int i = 0; i < ret.Length; i++)
+            if(ran.Next()%7 == 0)
             {
-                /*if(ret[i] > 200)
+                ran.NextBytes(ret);
+            }
+            
+            for(int i = 0; i < ret.Length; i++)
+            {
+                if(ret[i] > 20)
                 {
                     ret[i] = (byte)(ret[i] / 10);
                 }
@@ -44,8 +50,8 @@ namespace mosaicDrawer
                     ret[i] = (byte)(ret[i] + 1 + (byte)ran.Next()/10);
                 }
                 
-            }*/
-            Console.WriteLine("y");
+            }
+            //Console.WriteLine("y");
         }
     }
 }

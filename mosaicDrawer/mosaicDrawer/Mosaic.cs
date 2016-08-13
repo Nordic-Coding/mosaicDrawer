@@ -19,7 +19,7 @@ namespace mosaicDrawer
         int px, py, lx, ly, texId;
         int counter;
         //byte[] RGB;
-        public bool drawing;
+        public bool drawing, rendering;
 
         public Mosaic(int px, int py, int lx, int ly)
         {
@@ -30,6 +30,7 @@ namespace mosaicDrawer
             counter = 0;
             //RGB = new byte[3 * px * py];
             drawing = false;
+            rendering = false;
 
         }
 
@@ -65,12 +66,20 @@ namespace mosaicDrawer
                     // render graphics
                     drawing = true;
                     GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-                    GL.MatrixMode(MatrixMode.Modelview);
-                    GL.LoadIdentity();
+                    //GL.MatrixMode(MatrixMode.Modelview);
+                    //GL.LoadIdentity();
                     GL.BindTexture(TextureTarget.Texture2D, texId);
+                    //Draw the mosaic after it is done rendering.
+                    while(rendering)
+                    {
+                        //Sleep 1 ms
+                        Thread.Sleep(1);
+                    }
+
                     GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgb, px, py, 0,
                         OpenTK.Graphics.OpenGL.PixelFormat.Rgb, PixelType.Byte, RGB);
-                    //Draw the mosaic
+                    
+
                     GL.Begin(PrimitiveType.Quads);
                         GL.Color3(1f,1f,1f);
                         GL.TexCoord2(0.0f, 0.0f); GL.Vertex2(-1f, -1f);
