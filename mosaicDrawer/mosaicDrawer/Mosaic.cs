@@ -16,7 +16,9 @@ namespace mosaicDrawer
     {
         GameWindow mainWindow;
         int px, py, lx, ly;
+        int counter;
         byte[] RGB;
+        public bool drawing;
 
         public Mosaic(int px, int py, int lx, int ly)
         {
@@ -24,9 +26,9 @@ namespace mosaicDrawer
             this.py = py;
             this.lx = lx;
             this.ly = ly;
-
+            counter = 0;
             RGB = new byte[3 * px * py];
-
+            drawing = false;
             //runLoop(mainWindow);
         }
 
@@ -40,7 +42,7 @@ namespace mosaicDrawer
                 mainWindow.Load += (sender, e) =>
                 {
                     // setup settings, load textures, sounds
-                    mainWindow.VSync = VSyncMode.On;
+                    //mainWindow.VSync = VSyncMode.On;
                 };
 
                 //Resize handler
@@ -53,24 +55,26 @@ namespace mosaicDrawer
                 mainWindow.RenderFrame += (sender, e) =>
                 {
                     // render graphics
-
+                    drawing = true;
                     GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
                     //Draw the mosaic
-                    GL.Begin(BeginMode.Quads);
+                    GL.Begin(PrimitiveType.Quads);
                     for (int i = 0; i < px; i++)
                     {
                         for(int j = 0; j < py; j++)
                         {
                             GL.Color3(RGB[3 * px * i + j * 3], RGB[3 * px * i + j * 3 + 1], RGB[3 * px * i + j * 3 + 2]);
-                            GL.Vertex2((double)((lx / px) * i)/(double)lx, (double)((ly / py) * i) / (double)ly);
-                            GL.Vertex2((double)((lx / px) * i-lx/(px)) / (double)lx, (double)((ly / py) * i) / (double)ly);
-                            GL.Vertex2((double)((lx / px) * i - lx/px) / (double)lx, (double)((ly / py) * i-ly/py) / (double)ly);
-                            GL.Vertex2((double)((lx / px) * i) / (double)lx, (double)((ly / py) * i - ly / py) / (double)ly);
+                            GL.Vertex2((double)((lx / px) * i)/(double)lx*2f-1f, (double)((ly / py) * j) / (double)ly * 2f - 1f);
+                            GL.Vertex2((double)((lx / px) * i-lx/(px)) / (double)lx * 2f + 1f, (double)((ly / py) * j) / (double)ly * 2f - 1f);
+                            GL.Vertex2((double)((lx / px) * i - lx/px) / (double)lx * 2f + 1f, (double)((ly / py) * j-ly/py) / (double)ly * 2f + 1f);
+                            GL.Vertex2((double)((lx / px) * i) / (double)lx * 2f - 1f, (double)((ly / py) * j - ly / py) / (double)ly * 2f + 1f);
                         }
                     }
                     GL.End();
-
+                    counter++;
+                    mainWindow.Title = "MosaicDrawer " + lx.ToString() + "x" + ly.ToString() + " Window" + "(" + counter.ToString() + ")";
                     mainWindow.SwapBuffers();
+                    drawing = false;
                 };
 
                 mainWindow.UpdateFrame += (sender, e) =>
@@ -84,11 +88,11 @@ namespace mosaicDrawer
                 };
 
                 // Run the mainWindow at 144 updates per second
-                mainWindow.Run(144.0);
+                mainWindow.Run(60.0);
             }
         }
 
-        public void updateMosaic(byte[] RGB)
+        public void updateMosaic(ref byte[] RGB)
         {
             this.RGB = RGB;
         }
