@@ -29,7 +29,7 @@ namespace mosaicDrawer
             counter = 0;
             RGB = new byte[3 * px * py];
             drawing = false;
-            //runLoop(mainWindow);
+            //runLoop(mainWindow); sddsfsdf
         }
 
         public void runLoop()
