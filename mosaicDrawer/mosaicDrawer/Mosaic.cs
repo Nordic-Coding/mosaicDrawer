@@ -43,6 +43,8 @@ namespace mosaicDrawer
                 {
                     // setup settings, load textures, sounds
                     //mainWindow.VSync = VSyncMode.On;
+                    GL.Enable(EnableCap.Texture2D);
+
                 };
 
                 //Resize handler
@@ -57,6 +59,7 @@ namespace mosaicDrawer
                     // render graphics
                     drawing = true;
                     GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
+                    GL.BindTexture(TextureTarget.Texture2D, );
                     //Draw the mosaic
                     GL.Begin(PrimitiveType.Quads);
                     for (int i = 0; i < px; i++)
@@ -94,7 +97,11 @@ namespace mosaicDrawer
 
         public void updateMosaic(ref byte[] RGB)
         {
+            //Bind the referenced RGB to the texture.
             this.RGB = RGB;
+
+
         }
+
     }
 }
